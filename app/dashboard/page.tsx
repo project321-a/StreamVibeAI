@@ -2,17 +2,34 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import UploadZone from "./UploadZone";
 import { useRouter } from "next/navigation";
+
+interface VideoRecord {
+  id: string;
+  title: string;
+  genre: string;
+  rating: string;
+  year: string;
+  status: string;
+}
+
+interface UserProfile {
+  username?: string;
+  bio?: string;
+}
+
+interface CurrentUser {
+  id?: string;
+  email?: string;
+}
 
 export default function Dashboard() {
   const router = useRouter();
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [user, setUser] = useState<any>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [profile, setProfile] = useState<any>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [apiData, setApiData] = useState<any>(null);
+  const [user, setUser] = useState<CurrentUser | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [apiData, setApiData] = useState<Record<string, unknown> | null>(null);
+  const [videos, setVideos] = useState<VideoRecord[]>([]);
 
   useEffect(() => {
     const load = async () => {
@@ -23,7 +40,11 @@ export default function Dashboard() {
         return;
       }
 
-      setUser(data.user);
+      const currentUser: CurrentUser = {
+        id: data.user.id,
+        email: data.user.email || undefined,
+      };
+      setUser(currentUser);
 
       const { data: profileData } = await supabase
         .from("profiles")
@@ -31,7 +52,15 @@ export default function Dashboard() {
         .eq("id", data.user.id)
         .single();
 
-      setProfile(profileData);
+      setProfile(profileData as UserProfile | null);
+
+      const { data: videoData } = await supabase
+        .from("videos")
+        .select("id, title, genre, rating, year, status")
+        .eq("user_id", data.user.id)
+        .order("created_at", { ascending: false });
+
+      setVideos((videoData ?? []) as VideoRecord[]);
     };
 
     load();
@@ -88,6 +117,33 @@ export default function Dashboard() {
             <pre style={{ marginTop: 10, whiteSpace: 'pre-wrap' }}>{JSON.stringify(apiData, null, 2)}</pre>
           )}
         </div>
+        <div style={{ marginTop: 16 }}>
+          <h4>Upload</h4>
+          <UploadZone />
+        </div>
+      </div>
+
+      <div style={cardStyle}>
+        <h3>My Videos</h3>
+        {videos.length === 0 ? (
+          <p>No videos uploaded yet. Use the upload form above to publish or save a draft.</p>
+        ) : (
+          <div style={{ display: 'grid', gap: 12 }}>
+            {videos.map((video) => (
+              <div key={video.id} style={{ padding: 14, borderRadius: 12, background: 'var(--bg3)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+                  <div>
+                    <div style={{ fontWeight: 700 }}>{video.title}</div>
+                    <div style={{ color: 'var(--text2)', fontSize: 13 }}>{video.genre} · {video.rating} · {video.year}</div>
+                  </div>
+                  <span style={{ padding: '4px 10px', borderRadius: 999, background: 'rgba(255,255,255,.06)', color: 'var(--text2)', fontSize: 12 }}>
+                    {video.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
     </div>

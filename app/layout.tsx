@@ -1,6 +1,7 @@
 import "./globals.css";
 import Link from "next/link";
 import React from "react";
+import AuthWidget from "./components/AuthWidget";
 
 export default function RootLayout({
   children,
@@ -22,6 +23,9 @@ export default function RootLayout({
           </aside>
 
           <main style={{ flex: 1, padding: "20px" }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
+              <AuthWidget />
+            </div>
             {children}
           </main>
 
