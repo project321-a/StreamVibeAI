@@ -5,14 +5,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/player", label: "Browse" },
-  { href: "/episodes", label: "Episodes" },
-  { href: "/movies", label: "Movies" },
-  { href: "/shorts", label: "Shorts" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/dashboard", label: "Creator" },
-  { href: "/profile", label: "Profile" },
+  { href: "/", label: "Home", group: "main" },
+  { href: "/player", label: "Browse", group: "watch" },
+  { href: "/episodes", label: "Episodes", group: "watch" },
+  { href: "/shorts", label: "Shorts", group: "watch" },
+  { href: "/dashboard", label: "Creator", group: "creator", badge: "New" },
+  { href: "/pricing", label: "Pricing", group: "creator" },
+];
+
+const mobileExtraItems = [
+  { href: "/movies", label: "Movies", group: "watch" },
+  { href: "/profile", label: "Profile", group: "user" },
 ];
 
 export default function TopNav() {
@@ -23,6 +26,8 @@ export default function TopNav() {
     if (href === "/") return pathname === "/";
     return pathname?.startsWith(href);
   };
+
+  const closeNav = () => setOpen(false);
 
   return (
     <>
@@ -40,13 +45,28 @@ export default function TopNav() {
           <Link
             key={item.href}
             href={item.href}
-            className={isActive(item.href) ? "top-tab active" : "top-tab"}
-            onClick={() => setOpen(false)}
+            className={`top-tab${isActive(item.href) ? " active" : ""}${item.badge ? " with-badge" : ""}`}
+            onClick={closeNav}
           >
             {item.label}
+            {item.badge && <span className="tab-badge">{item.badge}</span>}
           </Link>
         ))}
       </nav>
+      {open && (
+        <div className="mobile-nav-extra">
+          {mobileExtraItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`mobile-nav-item${isActive(item.href) ? " active" : ""}`}
+              onClick={closeNav}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      )}
     </>
   );
 }

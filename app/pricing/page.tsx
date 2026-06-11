@@ -2,89 +2,149 @@ import Link from "next/link";
 
 export default function PricingPage() {
   return (
-    <main className="page active" style={{ minHeight: "calc(100vh - 54px)", padding: "48px 24px" }}>
-      <div className="plan" style={{ maxWidth: 960, margin: "0 auto" }}>
-        <div className="plan-pop">Pricing</div>
-        <h1 className="plan-name">Free to watch, built to pay creators.</h1>
-        <p className="plan-desc">StreamVibe supports ad revenue, subscription perks, community comments, and creator earnings from every upload.</p>
-
-        <div className="plans">
-          <div className="plan featured">
-            <div className="plan-pop">Viewer</div>
-            <div className="plan-name">Free with ads</div>
-            <div className="plan-price">$0</div>
-            <p className="plan-desc">Watch content for free while ads support creators and keep the platform thriving.</p>
-            <ul className="plan-feat">
-              <li><span className="check">✓</span> Unlimited ad-supported viewing</li>
-              <li><span className="check">✓</span> Discover trending creators</li>
-              <li><span className="check">✓</span> Continue watching queue</li>
-            </ul>
-            <Link href="/player" className="plan-btn primary">Browse free</Link>
-          </div>
-
-          <div className="plan">
-            <div className="plan-pop">Creator</div>
-            <div className="plan-name">Earn from uploads</div>
-            <div className="plan-price">$0</div>
-            <p className="plan-desc">Upload videos, collect revenue from ads and views, and track earnings with creator analytics.</p>
-            <ul className="plan-feat">
-              <li><span className="check">✓</span> Creator upload studio</li>
-              <li><span className="check">✓</span> Revenue per view</li>
-              <li><span className="check">✓</span> Ad earnings and referrals</li>
-            </ul>
-            <Link href="/dashboard" className="plan-btn secondary">Start uploading</Link>
-          </div>
-
-          <div className="plan">
-            <div className="plan-pop">Subscriber</div>
-            <div className="plan-name">Comment & premium</div>
-            <div className="plan-price">$7 / mo</div>
-            <p className="plan-desc">Subscribe to activate comments, join creator communities, and remove ads on subscribed channels.</p>
-            <ul className="plan-feat">
-              <li><span className="check">✓</span> Commenting privileges</li>
-              <li><span className="check">✓</span> Ad-free experience on subscribed channels</li>
-              <li><span className="check">✓</span> Early access to new uploads</li>
-            </ul>
-            <Link href="/login" className="plan-btn primary">Subscribe now</Link>
+    <main className="page-shell">
+      <section className="pricing-hero">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <div className="plan-pop">Creator monetisation</div>
+          <h1 className="plan-name">Premium revenue for creators, fans, and series.</h1>
+          <p className="plan-desc">
+            StreamVibe makes every upload a potential income stream — with subscription tiers, unlockable content,
+            pay-per-premiere access, and ad revenue built into one intelligent creator platform.
+          </p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
+            <Link href="/signup" className="plan-btn primary">
+              Start your creator journey
+            </Link>
+            <Link href="/pricing" className="plan-btn secondary">
+              Compare plans
+            </Link>
           </div>
         </div>
+      </section>
 
-        <div className="chart-wrap">
-          <div className="chart-title">Payment connectors</div>
-          <p className="plan-desc">Connect common payment providers to pay for subscriptions, avoid ads, and let creators receive payouts.</p>
-          <div className="grid" style={{ gap: 14, marginTop: 16 }}>
-            <article className="card">
-              <div className="card-poster">💳</div>
-              <div className="card-info">
-                <div className="card-title">Stripe support</div>
-                <div className="card-meta">Accept card payments and manage recurring subscriber billing.</div>
-              </div>
-            </article>
-            <article className="card">
-              <div className="card-poster">🅿️</div>
-              <div className="card-info">
-                <div className="card-title">PayPal support</div>
-                <div className="card-meta">Enable flexible digital wallet payments for viewers and creators.</div>
-              </div>
-            </article>
-            <article className="card">
-              <div className="card-poster">💱</div>
-              <div className="card-info">
-                <div className="card-title">Fast payouts</div>
-                <div className="card-meta">Creators can receive subscription and ad revenue through connected accounts.</div>
-              </div>
-            </article>
+      <section className="section-shell">
+        <div className="grid gap-10 lg:grid-cols-3">
+          <article className="rounded-[28px] border border-white/10 bg-slate-950/80 p-8 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+            <p className="section-eyebrow">For creators</p>
+            <h2 className="section-title">Unlock recurring support</h2>
+            <p className="section-copy">
+              Build direct fan relationships with subscription unlocks, premium series, and creator-led communities that pay over time.
+            </p>
+          </article>
+          <article className="rounded-[28px] border border-white/10 bg-slate-950/80 p-8 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+            <p className="section-eyebrow">For viewers</p>
+            <h2 className="section-title">Watch free or go premium</h2>
+            <p className="section-copy">
+              Discover free ad-supported videos, upgrade for exclusive content, and support creators through subscriptions and micro-payments.
+            </p>
+          </article>
+          <article className="rounded-[28px] border border-white/10 bg-slate-950/80 p-8 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+            <p className="section-eyebrow">For teams</p>
+            <h2 className="section-title">Scale with smarter tools</h2>
+            <p className="section-copy">
+              Manage production, revenue splits, analytics, and community access across multiple creators and series from one dashboard.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section className="section-shell">
+        <div className="plan" style={{ padding: 0, border: "none", background: "transparent" }}>
+          <div className="plans">
+            <div className="plan featured">
+              <div className="plan-pop">Viewer</div>
+              <div className="plan-name">Free with ads</div>
+              <div className="plan-price">$0</div>
+              <p className="plan-desc">
+                Watch unlimited content across episodes, shorts, and premium premieres while creators earn from ads.
+              </p>
+              <ul className="plan-feat">
+                <li><span className="check">✓</span> Free watch feed with ads</li>
+                <li><span className="check">✓</span> Discover new creators daily</li>
+                <li><span className="check">✓</span> Join early access drops</li>
+              </ul>
+              <Link href="/player" className="plan-btn primary">Browse for free</Link>
+            </div>
+
+            <div className="plan">
+              <div className="plan-pop">Creator</div>
+              <div className="plan-name">Launch your channel</div>
+              <div className="plan-price">$0</div>
+              <p className="plan-desc">
+                Publish, earn from ads, unlock premium episodes, and convert fans into paying subscribers.
+              </p>
+              <ul className="plan-feat">
+                <li><span className="check">✓</span> Creator upload studio</li>
+                <li><span className="check">✓</span> Ads + subscription payouts</li>
+                <li><span className="check">✓</span> Quick content analytics</li>
+              </ul>
+              <Link href="/dashboard" className="plan-btn secondary">Start uploading</Link>
+            </div>
+
+            <div className="plan">
+              <div className="plan-pop">Pro Studio</div>
+              <div className="plan-name">Premium creator tools</div>
+              <div className="plan-price">$7 / mo</div>
+              <p className="plan-desc">
+                Unlock advanced community perks, revenue insights, priority support, and deeper subscriber engagement tools.
+              </p>
+              <ul className="plan-feat">
+                <li><span className="check">✓</span> Premium subscription unlocks</li>
+                <li><span className="check">✓</span> Rich creator analytics</li>
+                <li><span className="check">✓</span> Subscriber-only access</li>
+              </ul>
+              <Link href="/login" className="plan-btn primary">Activate premium</Link>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div style={{ color: "var(--text2)", marginTop: 32, fontSize: 14, lineHeight: 1.8 }}>
-          <p><strong>How creators earn:</strong> ad views, clicks, and watch time generate payouts, while subscribers bring recurring support and comments unlock deeper community engagement.</p>
-          <p><strong>How viewers benefit:</strong> watch free with ads, upgrade for comments and perks, and support creators through every session.</p>
-          <p><strong>How StreamVibe grows:</strong> free access drives discovery, ads create revenue, subscriptions deepen loyalty, and creator uploads keep fresh content flowing.</p>
+      <section className="section-shell">
+        <div className="grid gap-8 lg:grid-cols-2">
+          <div className="rounded-[28px] border border-white/10 bg-slate-950/80 p-8 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+            <p className="section-eyebrow">Creator revenue engine</p>
+            <h2 className="section-title">Built to grow recurring creator income</h2>
+            <p className="section-copy">
+              StreamVibe blends ad monetisation, subscriber revenue, unlockable episodes, and direct fan support into one creator-centric streaming system.
+            </p>
+            <ul className="mt-6 space-y-4 text-sm text-slate-300">
+              <li>• Sell premium premieres and series access to paying fans.</li>
+              <li>• Offer subscription tiers with comments, badges, and early drops.</li>
+              <li>• Keep creators paid with transparent payout reporting.</li>
+            </ul>
+          </div>
+          <div className="rounded-[28px] border border-white/10 bg-slate-950/80 p-8 shadow-[0_30px_80px_rgba(15,23,42,0.35)]">
+            <p className="section-eyebrow">Why StreamVibe</p>
+            <h2 className="section-title">Premium fans stay longer</h2>
+            <p className="section-copy">
+              High-value audiences want curated collections, unlockable first looks, and seamless support options. StreamVibe delivers all of it with cinematic discovery and creator-first economics.
+            </p>
+            <ul className="mt-6 space-y-4 text-sm text-slate-300">
+              <li>• Free viewers fuel discovery, premium fans deliver recurring revenue.</li>
+              <li>• Creator dashboards show the real growth drivers behind every upload.</li>
+              <li>• Every plan supports a stronger economy for creators and audiences.</li>
+            </ul>
+          </div>
         </div>
+      </section>
 
-        <Link href="/" className="btn-ghost" style={{ marginTop: 24 }}>Back to home</Link>
-      </div>
+      <section className="section-shell text-center">
+        <div className="rounded-[32px] border border-white/10 bg-slate-950/90 p-10 shadow-[0_35px_100px_rgba(15,23,42,0.15)]">
+          <p className="section-eyebrow">Ready to launch</p>
+          <h2 className="section-title">Create premium content that pays.</h2>
+          <p className="section-copy max-w-3xl mx-auto">
+            Grow your streaming brand with creator-first tools and monetisation features designed for episodic series, shorts, and community-driven launches.
+          </p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link href="/signup" className="plan-btn primary">
+              Start free creator account
+            </Link>
+            <Link href="/dashboard" className="plan-btn secondary">
+              Explore creator features
+            </Link>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

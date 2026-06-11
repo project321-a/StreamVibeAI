@@ -35,26 +35,28 @@ export default function RootLayout({
             <div className="footer-grid">
               <div className="footer-col">
                 <div className="logo footer-logo">Stream<span>Vibe</span></div>
-                <p className="footer-note">StreamVibe is the AI-powered streaming platform for episodes, movies, shorts, and creator monetisation.</p>
+                <p className="footer-note">The AI-powered streaming platform where creators build premium audiences and fans discover premium content.</p>
               </div>
               <div className="footer-col">
-                <div className="footer-title">Product</div>
-                <Link href="/" className="footer-link">Home</Link>
-                <Link href="/player" className="footer-link">Watch</Link>
-                <Link href="/pricing" className="footer-link">Pricing</Link>
+                <div className="footer-title">For viewers</div>
+                <Link href="/player" className="footer-link">Browse content</Link>
+                <Link href="/episodes" className="footer-link">Episodes</Link>
+                <Link href="/shorts" className="footer-link">Shorts</Link>
+                <Link href="/profile" className="footer-link">My profile</Link>
+              </div>
+              <div className="footer-col">
+                <div className="footer-title">For creators</div>
                 <Link href="/dashboard" className="footer-link">Creator dashboard</Link>
+                <Link href="/pricing" className="footer-link">Creator plans</Link>
+                <Link href="/" className="footer-link">Creator tools</Link>
+                <a href="mailto:creators@streamvibe.ai" className="footer-link">Creator support</a>
               </div>
               <div className="footer-col">
-                <div className="footer-title">Support</div>
-                <Link href="/signup" className="footer-link">Create account</Link>
-                <Link href="/login" className="footer-link">Login</Link>
+                <div className="footer-title">Company</div>
+                <Link href="/" className="footer-link">About</Link>
+                <Link href="/pricing" className="footer-link">Pricing</Link>
                 <a href="mailto:hello@streamvibe.ai" className="footer-link">Contact</a>
-              </div>
-              <div className="footer-col">
-                <div className="footer-title">Monetisation</div>
-                <p className="footer-link">Ads, subscriptions, views, and creator payments.</p>
-                <p className="footer-link">Episodes, movies, and shorts.</p>
-                <p className="footer-link">AI-powered streaming experiences.</p>
+                <a href="#" className="footer-link">Privacy policy</a>
               </div>
             </div>
             <div className="footer-bottom">© 2026 StreamVibe. Create, watch, and earn with AI video content.</div>
