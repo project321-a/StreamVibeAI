@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import UploadZone from "./UploadZone";
-import { useRouter } from "next/navigation";
 
 interface VideoRecord {
   id: string;
@@ -40,11 +40,7 @@ export default function Dashboard() {
         return;
       }
 
-      const currentUser: CurrentUser = {
-        id: data.user.id,
-        email: data.user.email || undefined,
-      };
-      setUser(currentUser);
+      setUser({ id: data.user.id, email: data.user.email || undefined });
 
       const { data: profileData } = await supabase
         .from("profiles")
@@ -66,98 +62,150 @@ export default function Dashboard() {
     load();
   }, [router]);
 
+  const fetchBackendProfile = async () => {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData.session?.access_token;
+
+    if (!token) {
+      alert("Not authenticated");
+      return;
+    }
+
+    const res = await fetch("/api/profile", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const json = await res.json();
+    setApiData(json);
+  };
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+    <div className="dev-layout">
+      <aside className="dev-sidebar">
+        <div className="dev-sidebar-section">Console</div>
+        <button className="dev-nav-item active">Overview</button>
+        <button className="dev-nav-item">Uploads</button>
+        <button className="dev-nav-item">Profile</button>
+        <button className="dev-nav-item">API</button>
+      </aside>
 
-      <h1>Dashboard</h1>
+      <div className="dev-main">
+        <div className="dash-header">
+          <div className="dash-title">Creator Studio</div>
+          <div className="dash-sub">Your creator dashboard for AI episodes, movies, and shorts.</div>
+        </div>
 
-      {/* USER CARD */}
-      <div style={cardStyle}>
-        <h3>👤 Account</h3>
-        <p><b>Email:</b> {user?.email}</p>
-        <p><b>User ID:</b> {user?.id}</p>
-      </div>
+        <div className="metrics">
+          <div className="metric">
+            <div className="metric-lbl">Signed in as</div>
+            <div className="metric-val">{user?.email ?? "—"}</div>
+          </div>
+          <div className="metric">
+            <div className="metric-lbl">Estimated earnings</div>
+            <div className="metric-val">${(videos.length * 85).toLocaleString()}</div>
+            <div className="metric-delta delta-up">+{videos.length > 0 ? 8 + videos.length : 0}%</div>
+          </div>
+          <div className="metric">
+            <div className="metric-lbl">Content uploaded</div>
+            <div className="metric-val">{videos.length}</div>
+          </div>
+        </div>
 
-      {/* PROFILE CARD */}
-      <div style={cardStyle}>
-        <h3>📄 Profile</h3>
-        <p><b>Username:</b> {profile?.username || "Not set"}</p>
-        <p><b>Bio:</b> {profile?.bio || "No bio yet"}</p>
+        <div className="api-hero" style={{ marginBottom: 24 }}>
+          <h2>Creator-only dashboard</h2>
+          <p>Only creators can see earnings, format performance, and upload revenue breakdowns on this page.</p>
+        </div>
 
-        <button
-          onClick={() => router.push("/profile")}
-          style={buttonStyle}
-        >
-          Edit Profile
-        </button>
+        <div className="chart-wrap">
+          <div className="chart-title">Creator dashboard</div>
+          <div className="upload-actions" style={{ justifyContent: "flex-start" }}>
+            <button className="plan-btn primary" onClick={() => router.push("/profile")}>Edit profile</button>
+            <button className="plan-btn secondary" onClick={fetchBackendProfile}>Fetch backend</button>
+          </div>
+        </div>
 
-        <div style={{ marginTop: 10 }}>
-          <button
-            onClick={async () => {
-              const { data: sessionData } = await supabase.auth.getSession();
-              const token = sessionData.session?.access_token;
-              if (!token) {
-                alert("Not authenticated");
-                return;
-              }
+        <div className="api-hero">
+          <h2>Upload studio</h2>
+          <p>Upload AI-powered videos as episodes, movies, or shorts, and track how every format contributes to your revenue.</p>
+        </div>
 
-              const res = await fetch('/api/profile', {
-                headers: { Authorization: `Bearer ${token}` },
-              });
+        <UploadZone />
 
-              const json = await res.json();
-              setApiData(json);
-            }}
-            style={{ ...buttonStyle, marginLeft: 10 }}
-          >
-            Fetch Via Backend API
-          </button>
+        <div className="chart-wrap">
+          <div className="chart-title">Profile info</div>
+          <div className="plan-desc">Username: {profile?.username || "Not set"} · Bio: {profile?.bio || "No bio yet"}</div>
+        </div>
 
-          {apiData && (
-            <pre style={{ marginTop: 10, whiteSpace: 'pre-wrap' }}>{JSON.stringify(apiData, null, 2)}</pre>
+        <div className="chart-wrap">
+          <div className="chart-title">Payout settings</div>
+          <p className="plan-desc">Connect a payment method to receive subscriber and ad revenue payouts directly.</p>
+          <div className="grid" style={{ gap: 14, marginTop: 14 }}>
+            <article className="card">
+              <div className="card-poster">💳</div>
+              <div className="card-info">
+                <div className="card-title">Stripe</div>
+                <div className="card-meta">Connect Stripe to accept subscriptions and payout earnings.</div>
+              </div>
+            </article>
+            <article className="card">
+              <div className="card-poster">🅿️</div>
+              <div className="card-info">
+                <div className="card-title">PayPal</div>
+                <div className="card-meta">Receive creator revenue via popular wallet payments.</div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div className="chart-wrap">
+          <div className="chart-title">API console</div>
+          {apiData ? (
+            <pre className="code-block">{JSON.stringify(apiData, null, 2)}</pre>
+          ) : (
+            <p className="plan-desc">Click the button to load server-side profile data from the API.</p>
           )}
         </div>
-        <div style={{ marginTop: 16 }}>
-          <h4>Upload</h4>
-          <UploadZone />
+
+        <div className="chart-wrap">
+          <div className="chart-title">Recent uploads</div>
+          <table className="videos-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Genre</th>
+                <th>Year</th>
+                <th>Status</th>
+                <th>Earnings</th>
+              </tr>
+            </thead>
+            <tbody>
+              {videos.length === 0 ? (
+                <tr>
+                  <td colSpan={5} style={{ padding: 16 }}>No uploads yet. Create your first video above.</td>
+                </tr>
+              ) : (
+                videos.map((video) => (
+                  <tr key={video.id}>
+                    <td>{video.title}</td>
+                    <td>{video.genre}</td>
+                    <td>{video.year}</td>
+                    <td>
+                      <span className={`status-badge ${video.status === "published" ? "s-live" : video.status === "processing" ? "s-proc" : "s-draft"}`}>
+                        {video.status}
+                      </span>
+                    </td>
+                    <td>${video.status === "published" ? 120 : video.status === "processing" ? 25 : 0}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div style={{ marginTop: 24, color: "var(--text2)", fontSize: 14, lineHeight: 1.8 }}>
+          <p><strong>Creator earnings are visible here for your personal dashboard:</strong> ad revenue, subscriber income, and watch-time payouts are tracked for every upload.</p>
+          <p><strong>Platform identity:</strong> StreamVibe blends short-form clips, episodic series, and movie premieres into a single AI-powered streaming platform.</p>
         </div>
       </div>
-
-      <div style={cardStyle}>
-        <h3>My Videos</h3>
-        {videos.length === 0 ? (
-          <p>No videos uploaded yet. Use the upload form above to publish or save a draft.</p>
-        ) : (
-          <div style={{ display: 'grid', gap: 12 }}>
-            {videos.map((video) => (
-              <div key={video.id} style={{ padding: 14, borderRadius: 12, background: 'var(--bg3)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
-                  <div>
-                    <div style={{ fontWeight: 700 }}>{video.title}</div>
-                    <div style={{ color: 'var(--text2)', fontSize: 13 }}>{video.genre} · {video.rating} · {video.year}</div>
-                  </div>
-                  <span style={{ padding: '4px 10px', borderRadius: 999, background: 'rgba(255,255,255,.06)', color: 'var(--text2)', fontSize: 12 }}>
-                    {video.status}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
     </div>
   );
 }
-
-const cardStyle = {
-  padding: "20px",
-  border: "1px solid #ddd",
-  borderRadius: "10px",
-};
-
-const buttonStyle = {
-  marginTop: "10px",
-  padding: "10px 15px",
-  cursor: "pointer",
-};
